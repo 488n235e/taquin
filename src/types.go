@@ -3,12 +3,13 @@ package main
 import "math"
 
 type Puzzle struct {
-	board     [][]int
-	path      []int
-	dimension int
-	lastMove  int
-	distance  int
-	index     int // The index of the item in the heap.
+	board             [][]int
+	path              []int
+	dimension         int
+	lastMove          int
+	distance          int
+	selectedAlgorithm func() []int
+	index             int // The index of the item in the heap.
 }
 
 func (puzzle Puzzle) getBlankSpacePosition() []int {

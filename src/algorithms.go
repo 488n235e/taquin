@@ -4,7 +4,19 @@ import (
 	"container/heap"
 )
 
-func (puzzle *Puzzle) solveBFS() []int {
+var selectedAlgorithm string
+
+func (puzzle Puzzle) Solve() []int {
+	switch selectedAlgorithm {
+	case MANHATTAN:
+		return puzzle.Manhattan()
+	case BFS:
+		return puzzle.BFS()
+	}
+	return nil
+}
+
+func (puzzle *Puzzle) BFS() []int {
 
 	states := make([]*Puzzle, 0)
 	states = append(states, puzzle.getCopy())
@@ -21,7 +33,7 @@ func (puzzle *Puzzle) solveBFS() []int {
 	return nil
 }
 
-func (puzzle *Puzzle) solveAStarManhattan() []int {
+func (puzzle *Puzzle) Manhattan() []int {
 	states := make(PriorityQueue, 0)
 	newInstance := puzzle.getCopy()
 	states = append(states, newInstance)
