@@ -7,10 +7,10 @@ import (
 var selectedAlgorithm string
 
 func (puzzle Puzzle) Solve() []int {
-	switch selectedAlgorithm {
-	case MANHATTAN:
-		return puzzle.Manhattan()
-	case BFS:
+
+	if selectedAlgorithm == MANHATTAN || selectedAlgorithm == MISPLACED {
+		return puzzle.AStar()
+	} else {
 		return puzzle.BFS()
 	}
 	return nil
@@ -33,7 +33,7 @@ func (puzzle *Puzzle) BFS() []int {
 	return nil
 }
 
-func (puzzle *Puzzle) Manhattan() []int {
+func (puzzle *Puzzle) AStar() []int {
 	states := make(PriorityQueue, 0)
 	newInstance := puzzle.getCopy()
 	states = append(states, newInstance)
@@ -46,7 +46,7 @@ func (puzzle *Puzzle) Manhattan() []int {
 		for i := 0; i < len(children); i++ {
 			totalNodesExplored += 1
 			var child = children[i]
-			child.distance = len(child.path) + child.getManhattanDistance()
+			child.distance = len(child.path) + child.getCost()
 			states.Push(child)
 		}
 	}

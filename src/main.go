@@ -8,9 +8,10 @@ import (
 
 func usage() string {
 	return fmt.Sprintf(
-		"usage: taquin HEURISTIC [FILE]\nAvailable heuristics:\n%s%s",
-		" - manhattan\n",
+		"usage: taquin ALGORITHM [FILE]\nAvailable algorithms:\n%s%s%s",
 		" - bfs\n",
+		" - misplaced\n",
+		" - manhattan\n",
 	)
 }
 
@@ -58,6 +59,8 @@ func handleArgs() (*Puzzle, error) {
 		selectedAlgorithm = MANHATTAN
 	case BFS:
 		selectedAlgorithm = BFS
+	case MISPLACED:
+		selectedAlgorithm = MISPLACED
 	default:
 		return nil, fmt.Errorf(usage())
 	}

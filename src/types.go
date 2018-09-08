@@ -148,3 +148,26 @@ func (puzzle Puzzle) getManhattanDistance() int {
 	}
 	return distance
 }
+
+func (puzzle Puzzle) countMisplaced() int {
+	count := 0
+	for i := 0; i < puzzle.dimension; i++ {
+		for j := 0; j < puzzle.dimension; j++ {
+			piece := puzzle.board[i][j]
+			if piece != 0 {
+				originalLine := int(math.Floor(float64((piece - 1) / puzzle.dimension)))
+				originalColumn := int((piece - 1) % puzzle.dimension)
+				if i != originalLine || j != originalColumn { count++ }
+			}
+		}
+	}
+	return count
+}
+
+func (puzzle Puzzle) getCost() int {
+	if selectedAlgorithm == MANHATTAN {
+		return puzzle.getManhattanDistance()
+	} else {
+		return puzzle.countMisplaced()
+	}
+}
