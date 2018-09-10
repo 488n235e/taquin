@@ -7,7 +7,7 @@ import (
 type Puzzle struct {
 	board     [][]int
 	path      []int
-	dimension []int
+	dimension []int // dimension[0] represents the number of lines. dimension[1], the number of columns
 	lastMove  int
 	distance  int
 }
@@ -174,4 +174,36 @@ func (puzzle Puzzle) getCost() int {
 	} else {
 		return puzzle.countMisplaced()
 	}
+}
+
+func (puzzle Puzzle) isSolvable() bool {
+	flattenPuzzle := make([]int, 0)
+
+	for i := 0; i < puzzle.dimension[0]; i++ {
+		for j := 0; j < puzzle.dimension[1]; j++ {
+			flattenPuzzle = append(flattenPuzzle, puzzle.board[i][j])
+		}
+	}
+
+	ic := puzzle.getInversionsCount(flattenPuzzle)
+
+	if puzzle.dimension[0]%2 == 1 || puzzle.dimension[1]%2 == 1 {
+		return ic%2 == 0
+	} else if ic%2 == 0 {
+		return false
+	} else {
+		return true
+	}
+}
+
+func (puzzle Puzzle) getInversionsCount(flattenPuzzle []int) int {
+	ic := 0
+	for i := 0; i < puzzle.dimension[0]*puzzle.dimension[1]-1; i++ {
+		for j := i + 1; j < puzzle.dimension[0]*puzzle.dimension[1]; j++ {
+			if flattenPuzzle[i] > flattenPuzzle[j] {
+				ic++
+			}
+		}
+	}
+	return ic
 }

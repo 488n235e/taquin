@@ -27,7 +27,10 @@ func main() {
 		fmt.Fprintf(os.Stderr, "%s\n", err.Error())
 		return
 	}
-
+	if !puzzle.isSolvable() {
+		fmt.Println("️Puzzle is not solvable... 😔")
+		return
+	}
 	start := time.Now()
 	pathToSolution := puzzle.Solve()
 	defer fmt.Printf("Total nodes explored: %v\nPath to solution: %v\nTook %v to resolve puzzle", totalNodesExplored, pathToSolution, time.Since(start))
@@ -35,11 +38,6 @@ func main() {
 }
 
 func handleArgs() (*Puzzle, error) {
-	//var input = [][]int{{5, 1, 3, 4}, {2, 6, 7, 8}, {9, 10, 0, 12}, {13, 14, 11, 15}}
-	//input := [][]int{{13, 2, 3, 12}, {9, 11, 1, 10}, {0, 6, 4, 14}, {15, 8, 7, 5}}
-	//input := [][]int{{1, 3, 7, 4}, {6, 0, 2, 8}, {5, 9, 10, 11}, {13, 14, 15, 12}}
-
-	//	input := [][]int{{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 0, 15}}
 	argIdx := 1
 
 	if len(os.Args) == 1 {
