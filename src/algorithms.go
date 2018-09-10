@@ -1,7 +1,7 @@
 package main
 
 import (
-	"container/heap"
+	"fmt"
 )
 
 var selectedAlgorithm string
@@ -34,20 +34,24 @@ func (puzzle *Puzzle) BFS() []int {
 }
 
 func (puzzle *Puzzle) AStar() []int {
-	states := make(PriorityQueue, 0)
+	states := NewImplicitHeapMin(true)
 	newInstance := puzzle.getCopy()
-	states = append(states, newInstance)
-	for len(states) > 0 {
-		state := heap.Pop(&states).(*Puzzle)
-		if state.isGoalState() {
-			return state.path
+	states.Push(0, newInstance)
+	for states.Len() > 0 {
+		state, ok := states.Pop()
+		s := state.(*Puzzle)
+		if !ok {
+			fmt.Errorf("error")
 		}
-		children := state.visit()
+		if s.isGoalState(){
+			return s.path
+		}
+		children := s.visit()
 		for i := 0; i < len(children); i++ {
 			totalNodesExplored += 1
 			var child = children[i]
 			child.distance = len(child.path) + child.getCost()
-			states.Push(child)
+			states.Push(child.distance, child)
 		}
 	}
 	return nil

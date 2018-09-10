@@ -1,20 +1,20 @@
 package main
 
-import "math"
+import (
+	"math"
+)
 
 type Puzzle struct {
-	board             [][]int
-	path              []int
-	dimension         int
-	lastMove          int
-	distance          int
-	selectedAlgorithm func() []int
-	index             int // The index of the item in the heap.
+	board     [][]int
+	path      []int
+	dimension []int
+	lastMove  int
+	distance  int
 }
 
 func (puzzle Puzzle) getBlankSpacePosition() []int {
-	for i := 0; i < puzzle.dimension; i++ {
-		for j := 0; j < puzzle.dimension; j++ {
+	for i := 0; i < puzzle.dimension[0]; i++ {
+		for j := 0; j < puzzle.dimension[1]; j++ {
 			if puzzle.board[i][j] == 0 {
 				return []int{i, j}
 			}
@@ -34,11 +34,11 @@ func (puzzle Puzzle) getMove(piece int) string {
 	switch {
 	case line > 0 && piece == puzzle.board[line-1][column]:
 		return DOWN
-	case line < puzzle.dimension-1 && piece == puzzle.board[line+1][column]:
+	case line < puzzle.dimension[0]-1 && piece == puzzle.board[line+1][column]:
 		return UP
 	case column > 0 && piece == puzzle.board[line][column-1]:
 		return RIGHT
-	case column < puzzle.dimension-1 && piece == puzzle.board[line][column+1]:
+	case column < puzzle.dimension[1]-1 && piece == puzzle.board[line][column+1]:
 		return LEFT
 	}
 	return ""
@@ -46,12 +46,12 @@ func (puzzle Puzzle) getMove(piece int) string {
 
 func (puzzle *Puzzle) isGoalState() bool {
 
-	for i := 0; i < puzzle.dimension; i++ {
-		for j := 0; j < puzzle.dimension; j++ {
+	for i := 0; i < puzzle.dimension[0]; i++ {
+		for j := 0; j < puzzle.dimension[1]; j++ {
 			piece := puzzle.board[i][j]
 			if piece != 0 {
-				originalLine := int(math.Floor(float64((piece - 1) / puzzle.dimension)))
-				originalColumn := (piece - 1) % puzzle.dimension
+				originalLine := int(math.Floor(float64((piece - 1) / puzzle.dimension[0])))
+				originalColumn := (piece - 1) % puzzle.dimension[1]
 				if i != originalLine || j != originalColumn {
 					return false
 				}
@@ -73,20 +73,22 @@ func (puzzle Puzzle) getCopy() *Puzzle {
 		newBoardDuplicate[i] = data[start:end:end]
 		copy(newBoardDuplicate[i], puzzle.board[i])
 	}
+	newDimensionDuplicate := make([]int, n)
+	copy(newDimensionDuplicate, puzzle.dimension)
 	newPathDuplicate := make([]int, len(puzzle.path))
 	copy(newPathDuplicate, puzzle.path)
 
 	newPuzzle.board = newBoardDuplicate
 	newPuzzle.path = newPathDuplicate
-	newPuzzle.dimension = puzzle.dimension
+	newPuzzle.dimension = newDimensionDuplicate
 	return newPuzzle
 }
 
 func (puzzle Puzzle) getAllowedMoves() []int {
 	var allowedMoves = make([]int, 0)
 
-	for i := 0; i < puzzle.dimension; i++ {
-		for j := 0; j < puzzle.dimension; j++ {
+	for i := 0; i < puzzle.dimension[0]; i++ {
+		for j := 0; j < puzzle.dimension[1]; j++ {
 			piece := puzzle.board[i][j]
 			if puzzle.getMove(piece) != "" {
 				allowedMoves = append(allowedMoves, piece)
@@ -97,7 +99,7 @@ func (puzzle Puzzle) getAllowedMoves() []int {
 }
 
 func (puzzle Puzzle) visit() []*Puzzle {
-	var children = make([]*Puzzle, 0)
+	children := make([]*Puzzle, 0)
 	allowedMoves := puzzle.getAllowedMoves()
 
 	for i := 0; i < len(allowedMoves); i++ {
@@ -136,12 +138,12 @@ func (puzzle Puzzle) move(piece int) string {
 
 func (puzzle Puzzle) getManhattanDistance() int {
 	var distance = 0
-	for i := 0; i < puzzle.dimension; i++ {
-		for j := 0; j < puzzle.dimension; j++ {
+	for i := 0; i < puzzle.dimension[0]; i++ {
+		for j := 0; j < puzzle.dimension[1]; j++ {
 			piece := puzzle.board[i][j]
 			if piece != 0 {
-				originalLine := int(math.Floor(float64((piece - 1) / puzzle.dimension)))
-				originalColumn := int((piece - 1) % puzzle.dimension)
+				originalLine := int(math.Floor(float64((piece - 1) / puzzle.dimension[0])))
+				originalColumn := int((piece - 1) % puzzle.dimension[1])
 				distance += int(math.Abs(float64(i-originalLine)) + math.Abs(float64(j-originalColumn)))
 			}
 		}
@@ -151,13 +153,15 @@ func (puzzle Puzzle) getManhattanDistance() int {
 
 func (puzzle Puzzle) countMisplaced() int {
 	count := 0
-	for i := 0; i < puzzle.dimension; i++ {
-		for j := 0; j < puzzle.dimension; j++ {
+	for i := 0; i < puzzle.dimension[0]; i++ {
+		for j := 0; j < puzzle.dimension[1]; j++ {
 			piece := puzzle.board[i][j]
 			if piece != 0 {
-				originalLine := int(math.Floor(float64((piece - 1) / puzzle.dimension)))
-				originalColumn := int((piece - 1) % puzzle.dimension)
-				if i != originalLine || j != originalColumn { count++ }
+				originalLine := int(math.Floor(float64((piece - 1) / puzzle.dimension[0])))
+				originalColumn := int((piece - 1) % puzzle.dimension[1])
+				if i != originalLine || j != originalColumn {
+					count++
+				}
 			}
 		}
 	}
