@@ -8,10 +8,11 @@ import (
 
 func usage() string {
 	return fmt.Sprintf(
-		"usage: taquin ALGORITHM <pathToFile>\nAvailable algorithms:\n%s%s%s",
+		"usage: taquin ALGORITHM <pathToFile>\nAvailable algorithms:\n%s%s%s%s",
 		" - bfs\n",
 		" - misplaced\n",
 		" - manhattan\n",
+		" - misplaced+manhattan\n",
 	)
 }
 
@@ -47,7 +48,6 @@ func handleArgs() (*Puzzle, error) {
 	if len(os.Args) == argIdx {
 		return nil, fmt.Errorf(usage())
 	}
-
 	switch os.Args[argIdx] {
 	case MANHATTAN:
 		selectedAlgorithm = MANHATTAN
@@ -55,6 +55,8 @@ func handleArgs() (*Puzzle, error) {
 		selectedAlgorithm = BFS
 	case MISPLACED:
 		selectedAlgorithm = MISPLACED
+	case MISPLACEDMANHATTAN:
+		selectedAlgorithm = MISPLACEDMANHATTAN
 	default:
 		return nil, fmt.Errorf(usage())
 	}

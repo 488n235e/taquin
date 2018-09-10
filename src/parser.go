@@ -55,19 +55,25 @@ func clean(data []byte) ([][]int, []int, error) {
 	dimension := make([]int, 2)
 	board := make([][]int, 0)
 	lines := strings.Split(string(data), "\n")
-	for _, v := range lines {
-		if v == "" {
+	for _, line := range lines {
+		if line == "" {
 			break
 		}
-		line := strings.TrimSpace(v)
-		l := strings.Split(line, "\t")
+		line := strings.TrimSpace(line)
+		if j := strings.Index(line, "#"); j != -1 {
+			line = line[:j]
+		}
+		if len(line) == 0 {
+			continue
+		}
+		ln := strings.Split(line, "\t")
 		newLines := make([]int, 0)
-		for _, m := range l {
-			n, err := strconv.Atoi(m)
+		for _, l := range ln {
+			l, err := strconv.Atoi(l)
 			if err != nil {
 				return nil, nil, err
 			}
-			newLines = append(newLines, n)
+			newLines = append(newLines, l)
 		}
 		if len(line) == 0 {
 			continue

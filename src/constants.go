@@ -13,4 +13,5 @@ const (
 	BFS       = "bfs"
 	MANHATTAN = "manhattan"
 	MISPLACED = "misplaced"
+	MISPLACEDMANHATTAN = "misplaced+manhattan"
 )

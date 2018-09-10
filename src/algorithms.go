@@ -8,7 +8,7 @@ var selectedAlgorithm string
 
 func (puzzle Puzzle) Solve() []int {
 
-	if selectedAlgorithm == MANHATTAN || selectedAlgorithm == MISPLACED {
+	if selectedAlgorithm == MANHATTAN || selectedAlgorithm == MISPLACED || selectedAlgorithm == MISPLACEDMANHATTAN {
 		return puzzle.AStar()
 	} else {
 		return puzzle.BFS()

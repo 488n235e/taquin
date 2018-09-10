@@ -1,4 +1,5 @@
 package main
+
 import "sync"
 
 type ihCompare func(p, c implicitHeapNode) bool
@@ -124,7 +125,6 @@ func (h *ImplicitHeapMin) Pop() (v interface{}, ok bool) {
 		pI = rightChildIndex
 	}
 
-	//if it is mostly empty (less than 1/4), shrink it
 	if cap(h.a) > 8 && h.n <= cap(h.a)/4 {
 		newSlice := make([]implicitHeapNode, cap(h.a)/2)
 		copy(newSlice, h.a)

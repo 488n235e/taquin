@@ -1,0 +1,5 @@
+# Teacher puzzle. IMHO it's not solvable
+13	2	3	12
+9	11	1	10
+0	6	4	14
+15	8	7	5

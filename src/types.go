@@ -7,7 +7,7 @@ import (
 type Puzzle struct {
 	board     [][]int
 	path      []int
-	dimension []int // dimension[0] represents the number of lines. dimension[1], the number of columns
+	dimension []int // dimension[0] represents the number of lines. dimension[1.txt], the number of columns
 	lastMove  int
 	distance  int
 }
@@ -171,8 +171,10 @@ func (puzzle Puzzle) countMisplaced() int {
 func (puzzle Puzzle) getCost() int {
 	if selectedAlgorithm == MANHATTAN {
 		return puzzle.getManhattanDistance()
-	} else {
+	} else if selectedAlgorithm == MISPLACED {
 		return puzzle.countMisplaced()
+	} else {
+		return puzzle.countMisplaced() + puzzle.getManhattanDistance()
 	}
 }
 
